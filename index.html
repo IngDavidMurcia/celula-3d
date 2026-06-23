@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Del Microscopio al Modelo 3D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #1e3a8a 0%, #0f172a 40%, #020617 100%);
+            color: white;
+            overflow-x: hidden
+        }
+
+        .hero {
+            padding: 40px 20px 25px;
+            text-align: center
+        }
+
+        .logo {
+            width: 110px;
+            margin-bottom: 15px
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .2);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: .85rem;
+            margin-bottom: 15px
+        }
+
+        .hero h1 {
+            font-size: 2.1rem;
+            line-height: 1.2;
+            margin-bottom: 12px
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            color: #cbd5e1;
+            line-height: 1.7
+        }
+
+        .instructions {
+            width: 92%;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: rgba(34, 197, 94, .15);
+            border: 1px solid rgba(34, 197, 94, .4);
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center
+        }
+
+        .viewer {
+            width: 95%;
+            max-width: 1100px;
+            margin: auto;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .45)
+        }
+
+        .viewer iframe {
+            width: 100%;
+            height: 70vh;
+            border: none
+        }
+
+        .section {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px
+        }
+
+        .tech-card {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 20px;
+            border-radius: 18px;
+            text-align: center
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 10px
+        }
+
+        .message,
+        .institution {
+            background: rgba(255, 255, 255, .05);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            line-height: 1.8;
+            text-align: center
+        }
+
+        .authors {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, .1)
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8
+        }
+
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 1.7rem
+            }
+
+            .viewer iframe {
+                height: 60vh
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <img src="logosena.png" alt="Logo SENA" class="logo">
+        <br><br>
+        <div class="badge">Experiencia de Tecnologías Educativas</div>
+        <br>
+        <h1>🔬 Del Microscopio al Modelo 3D</h1>
+        <p>Explora una célula vegetal interactiva</p>
+    </section>
+
+    <div class="instructions">
+        👆 Arrastra para rotar el modelo • 🔍 Pellizca para hacer zoom • 📱 Explora libremente cada estructura celular
+    </div>
+
+    <div class="viewer">
+        <iframe title="Eukaryotic Plant Cell" frameborder="0" allowfullscreen
+            allow="autoplay; fullscreen; xr-spatial-tracking"
+            src="https://sketchfab.com/models/f258c65762e5435c9d58c1aa136b557a/embed">
+        </iframe>
+    </div>
+
+    <section class="section">
+        <h2 class="section-title">🚀 Tecnologías Integradas</h2>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="icon">🤖</div>
+                <h3>IA Generativa</h3>
+                <p>Creación rápida de contenidos educativos.</p>
+            </div>
+            <div class="tech-card">
+                <div class="icon">🎨</div>
+                <h3>Gamma</h3>
+                <p>Presentaciones dinámicas asistidas por IA.</p>
+            </div>
+            <div class="tech-card">
+                <div class="icon">📱</div>
+                <h3>Realidad Aumentada</h3>
+                <p>Conexión entre objetos físicos y contenido digital.</p>
+            </div>
+            <div class="tech-card">
+                <div class="icon">🧬</div>
+                <h3>Modelos 3D</h3>
+                <p>Exploración interactiva de estructuras complejas.</p>
+            </div>
+            <div class="tech-card">
+                <div class="icon">🔬</div>
+                <h3>Microscopía</h3>
+                <p>Observación directa de fenómenos reales.</p>
+            </div>
+            <div class="tech-card">
+                <div class="icon">🎯</div>
+                <h3>Evaluación Digital</h3>
+                <p>Kahoot y Mentimeter.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="message">
+            <h2>💡 Más allá de la Biología</h2>
+            <p>La misma estrategia puede aplicarse en matemáticas, diseño, mecánica, inglés, química, electrónica,
+                logística y muchas otras áreas.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="institution">
+            <p><strong>SENA</strong><br>Centro Tecnológico del Mobiliario<br>Tecnoacademia 2026</p>
+            <div class="authors">
+                <h3>Autores de la experiencia</h3>
+                <p>David Murcia - Elizabeth Alzate - Víctor Cifuentes </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Transferencia de Tecnologías Educativas • Tecnoacademia SENA 2026
+    </footer>
+
+</body>
+
+</html>
