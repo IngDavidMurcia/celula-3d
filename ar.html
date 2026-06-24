@@ -53,17 +53,84 @@
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0">
-            <a-gltf-model src="#celula" position="0 0 0" scale="1.5 1.5 1.5" rotation="0 0 0"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+            <a-gltf-model src="#celula" position="0 0 0" scale="1.5 1.5 1.5" rotation="20 0 0">
             </a-gltf-model>
         </a-entity>
 
     </a-scene>
 
     <script>
+        // Ocultar pantalla de carga
         const scene = document.querySelector('a-scene');
         scene.addEventListener('loaded', () => {
             document.getElementById('loading').style.display = 'none';
+        });
+
+        // Rotación con el dedo + zoom con pinch
+        const modelo = document.querySelector('a-gltf-model');
+
+        let rotX = -20;
+        let rotY = 0;
+        let scale = 0.8;
+
+        // Touch único → rotación
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+
+        // Pinch → zoom
+        let lastPinchDist = null;
+
+        function getPinchDist(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+                lastPinchDist = null;
+            } else if (e.touches.length === 2) {
+                lastPinchDist = getPinchDist(e.touches);
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+
+            if (e.touches.length === 1 && lastPinchDist === null) {
+                // Rotación en X e Y
+                const deltaX = e.touches[0].clientX - lastTouchX;
+                const deltaY = e.touches[0].clientY - lastTouchY;
+
+                rotY += deltaX * 0.4;
+                rotX += deltaY * 0.4;
+
+                // Limitar rotación vertical para que no se voltee raro
+                rotX = Math.max(-80, Math.min(80, rotX));
+
+                modelo.setAttribute('rotation', `${rotX} ${rotY} 0`);
+
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+
+            } else if (e.touches.length === 2) {
+                // Zoom con pinch
+                const dist = getPinchDist(e.touches);
+                if (lastPinchDist !== null) {
+                    const delta = (dist - lastPinchDist) * 0.005;
+                    scale = Math.max(0.1, Math.min(3.0, scale + delta));
+                    modelo.setAttribute('scale', `${scale} ${scale} ${scale}`);
+                }
+                lastPinchDist = dist;
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                lastPinchDist = null;
+            }
         });
     </script>
 
