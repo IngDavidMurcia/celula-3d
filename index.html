@@ -1,229 +1,424 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Del Microscopio al Modelo 3D</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Del Microscopio al Modelo 3D</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #030d0a;
+      --bg2:       #071a12;
+      --green-dim: #0d4a2a;
+      --green:     #1db954;
+      --green-hi:  #4ade80;
+      --blue:      #22d3ee;
+      --blue-dim:  #083344;
+      --text:      #e2f5ec;
+      --muted:     #7ab89a;
+      --border:    rgba(29,185,84,.18);
+      --glass:     rgba(13,74,42,.22);
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at top, #1e3a8a 0%, #0f172a 40%, #020617 100%);
-            color: white;
-            overflow-x: hidden
-        }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
 
-        .hero {
-            padding: 40px 20px 25px;
-            text-align: center
-        }
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
 
-        .logo {
-            width: 110px;
-            margin-bottom: 15px
-        }
+    /* ── FONDO ORGÁNICO ANIMADO ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(29,185,84,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(34,211,238,.06) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 30% at 50% 100%, rgba(13,74,42,.15) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, .1);
-            border: 1px solid rgba(255, 255, 255, .2);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: .85rem;
-            margin-bottom: 15px
-        }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 48px 24px 32px;
+      text-align: center;
+    }
 
-        .hero h1 {
-            font-size: 2.1rem;
-            line-height: 1.2;
-            margin-bottom: 12px
-        }
+    .logo {
+      width: 90px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 12px rgba(29,185,84,.3));
+    }
 
-        .hero p {
-            max-width: 700px;
-            margin: auto;
-            color: #cbd5e1;
-            line-height: 1.7
-        }
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid var(--border);
+      background: var(--glass);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
 
-        .instructions {
-            width: 92%;
-            max-width: 1000px;
-            margin: 20px auto;
-            background: rgba(34, 197, 94, .15);
-            border: 1px solid rgba(34, 197, 94, .4);
-            padding: 15px;
-            border-radius: 16px;
-            text-align: center
-        }
+    .hero h1 {
+      font-size: clamp(1.7rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--green-hi) 0%, var(--blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        .viewer {
-            width: 95%;
-            max-width: 1100px;
-            margin: auto;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .45)
-        }
+    .hero p {
+      max-width: 640px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: .97rem;
+    }
 
-        .viewer iframe {
-            width: 100%;
-            height: 70vh;
-            border: none
-        }
+    /* ── BOTONES CTA ── */
+    .cta-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 28px 24px 8px;
+    }
 
-        .section {
-            width: 92%;
-            max-width: 1100px;
-            margin: 40px auto
-        }
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 480px;
+      padding: 18px 24px;
+      border-radius: 18px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform .18s, box-shadow .18s;
+      border: 1px solid transparent;
+    }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 20px
-        }
+    .btn:active { transform: scale(.97); }
 
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px
-        }
+    .btn-ar {
+      background: linear-gradient(135deg, #0d4a2a 0%, #083344 100%);
+      border-color: var(--green);
+      box-shadow: 0 0 28px rgba(29,185,84,.25), inset 0 1px 0 rgba(255,255,255,.06);
+      color: var(--green-hi);
+    }
 
-        .tech-card {
-            background: rgba(255, 255, 255, .06);
-            border: 1px solid rgba(255, 255, 255, .08);
-            padding: 20px;
-            border-radius: 18px;
-            text-align: center
-        }
+    .btn-ar:hover {
+      box-shadow: 0 0 42px rgba(29,185,84,.4);
+      transform: translateY(-2px);
+    }
 
-        .icon {
-            font-size: 2rem;
-            margin-bottom: 10px
-        }
+    .btn-3d {
+      background: linear-gradient(135deg, #083344 0%, #0a1f2e 100%);
+      border-color: var(--blue);
+      box-shadow: 0 0 28px rgba(34,211,238,.15), inset 0 1px 0 rgba(255,255,255,.06);
+      color: var(--blue);
+    }
 
-        .message,
-        .institution {
-            background: rgba(255, 255, 255, .05);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, .08);
-            line-height: 1.8;
-            text-align: center
-        }
+    .btn-3d:hover {
+      box-shadow: 0 0 42px rgba(34,211,238,.3);
+      transform: translateY(-2px);
+    }
 
-        .authors {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, .1)
-        }
+    .btn-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #94a3b8
-        }
+    .btn-text { text-align: left; }
+    .btn-label { font-size: .75rem; font-weight: 400; color: var(--muted); margin-bottom: 2px; }
+    .btn-title { font-size: 1.05rem; font-weight: 700; }
 
-        @media(max-width:768px) {
-            .hero h1 {
-                font-size: 1.7rem
-            }
+    .btn-arrow {
+      margin-left: auto;
+      font-size: 1.2rem;
+      opacity: .5;
+    }
 
-            .viewer iframe {
-                height: 60vh
-            }
-        }
-    </style>
+    /* ── SEPARADOR BIO ── */
+    .divider {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 8px 0 4px;
+    }
+
+    .divider span {
+      font-family: 'Space Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .15em;
+      color: var(--green-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── VISOR SKETCHFAB ── */
+    .viewer-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 16px;
+    }
+
+    .instructions {
+      max-width: 680px;
+      margin: 0 auto 14px;
+      background: rgba(29,185,84,.08);
+      border: 1px solid var(--border);
+      padding: 12px 18px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: .83rem;
+      color: var(--muted);
+    }
+
+    .viewer {
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 60px rgba(29,185,84,.1);
+    }
+
+    .viewer iframe {
+      width: 100%;
+      height: 68vh;
+      border: none;
+      display: block;
+    }
+
+    /* ── SECCIONES ── */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 44px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--green-hi);
+    }
+
+    /* ── TECH GRID ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+      gap: 12px;
+    }
+
+    .tech-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 20px 16px;
+      border-radius: 16px;
+      text-align: center;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .tech-card:hover {
+      border-color: var(--green);
+      transform: translateY(-3px);
+    }
+
+    .icon { font-size: 1.9rem; margin-bottom: 10px; }
+
+    .tech-card h3 {
+      font-size: .88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--green-hi);
+    }
+
+    .tech-card p {
+      font-size: .78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── BLOQUES MENSAJE E INSTITUCIÓN ── */
+    .message, .institution {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      border-radius: 20px;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .message h2, .institution h3 {
+      color: var(--green-hi);
+      margin-bottom: 10px;
+    }
+
+    .message p, .institution p { color: var(--muted); font-size: .93rem; }
+
+    .authors {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .1em;
+      color: var(--green-dim);
+    }
+
+    /* ── PULSO EN BOTÓN AR ── */
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 0 28px rgba(29,185,84,.25), inset 0 1px 0 rgba(255,255,255,.06); }
+      50%       { box-shadow: 0 0 48px rgba(29,185,84,.5), inset 0 1px 0 rgba(255,255,255,.06); }
+    }
+
+    .btn-ar { animation: pulse-border 2.8s ease-in-out infinite; }
+    .btn-ar:hover { animation: none; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 36px 18px 24px; }
+      .viewer iframe { height: 56vw; min-height: 240px; }
+    }
+  </style>
 </head>
-
 <body>
 
-    <section class="hero">
-        <img src="logosena.png" alt="Logo SENA" class="logo">
-        <br><br>
-        <div class="badge">Experiencia de Tecnologías Educativas</div>
-        <br>
-        <h1>🔬 Del Microscopio al Modelo 3D</h1>
-        <p>Explora una célula vegetal interactiva</p>
-    </section>
+  <!-- HERO -->
+  <section class="hero">
+    <img src="logosena.png" alt="Logo SENA" class="logo">
+    <div class="eyebrow">Experiencia de Tecnologías Educativas</div>
+    <h1>🔬 Del Microscopio al Modelo 3D</h1>
+    <p>Recorriste la célula vegetal bajo el microscopio. Ahora explorála en capas digitales: primero en Realidad Aumentada, luego en 3D interactivo.</p>
+  </section>
 
+  <!-- BOTONES HUB -->
+  <div class="cta-wrap">
+
+    <a href="ar.html" class="btn btn-ar">
+      <span class="btn-icon">📡</span>
+      <span class="btn-text">
+        <span class="btn-label">Paso 1 — Apuntá la cámara a la imagen impresa</span>
+        <span class="btn-title">Experiencia en Realidad Aumentada</span>
+      </span>
+      <span class="btn-arrow">→</span>
+    </a>
+
+    <a href="#modelo3d" class="btn btn-3d">
+      <span class="btn-icon">🧬</span>
+      <span class="btn-text">
+        <span class="btn-label">Paso 2 — Explorá el modelo libremente</span>
+        <span class="btn-title">Modelo 3D Interactivo</span>
+      </span>
+      <span class="btn-arrow">↓</span>
+    </a>
+
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider"><span>─── modelo 3d interactivo ───</span></div>
+
+  <!-- VISOR SKETCHFAB -->
+  <section class="viewer-section" id="modelo3d">
     <div class="instructions">
-        👆 Arrastra para rotar el modelo • 🔍 Pellizca para hacer zoom • 📱 Explora libremente cada estructura celular
+      👆 Arrastrá para rotar &nbsp;•&nbsp; 🔍 Pellizca para hacer zoom &nbsp;•&nbsp; 📱 Explorá cada estructura celular
     </div>
-
     <div class="viewer">
-        <iframe title="Eukaryotic Plant Cell" frameborder="0" allowfullscreen
-            allow="autoplay; fullscreen; xr-spatial-tracking"
-            src="https://sketchfab.com/models/f258c65762e5435c9d58c1aa136b557a/embed">
-        </iframe>
+      <iframe
+        title="Eukaryotic Plant Cell"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        src="https://sketchfab.com/models/f258c65762e5435c9d58c1aa136b557a/embed">
+      </iframe>
     </div>
+  </section>
 
-    <section class="section">
-        <h2 class="section-title">🚀 Tecnologías Integradas</h2>
-        <div class="tech-grid">
-            <div class="tech-card">
-                <div class="icon">🤖</div>
-                <h3>IA Generativa</h3>
-                <p>Creación rápida de contenidos educativos.</p>
-            </div>
-            <div class="tech-card">
-                <div class="icon">🎨</div>
-                <h3>Gamma</h3>
-                <p>Presentaciones dinámicas asistidas por IA.</p>
-            </div>
-            <div class="tech-card">
-                <div class="icon">📱</div>
-                <h3>Realidad Aumentada</h3>
-                <p>Conexión entre objetos físicos y contenido digital.</p>
-            </div>
-            <div class="tech-card">
-                <div class="icon">🧬</div>
-                <h3>Modelos 3D</h3>
-                <p>Exploración interactiva de estructuras complejas.</p>
-            </div>
-            <div class="tech-card">
-                <div class="icon">🔬</div>
-                <h3>Microscopía</h3>
-                <p>Observación directa de fenómenos reales.</p>
-            </div>
-            <div class="tech-card">
-                <div class="icon">🎯</div>
-                <h3>Evaluación Digital</h3>
-                <p>Kahoot y Mentimeter.</p>
-            </div>
-        </div>
-    </section>
+  <!-- TECNOLOGÍAS -->
+  <section class="section">
+    <h2 class="section-title">🚀 Tecnologías Integradas</h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="icon">🤖</div>
+        <h3>IA Generativa</h3>
+        <p>Creación rápida de contenidos educativos.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🎨</div>
+        <h3>Gamma</h3>
+        <p>Presentaciones dinámicas asistidas por IA.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">📱</div>
+        <h3>Realidad Aumentada</h3>
+        <p>Conexión entre objetos físicos y contenido digital.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🧬</div>
+        <h3>Modelos 3D</h3>
+        <p>Exploración interactiva de estructuras complejas.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🔬</div>
+        <h3>Microscopía</h3>
+        <p>Observación directa de fenómenos reales.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🎯</div>
+        <h3>Evaluación Digital</h3>
+        <p>Kahoot y Mentimeter.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="message">
-            <h2>💡 Más allá de la Biología</h2>
-            <p>La misma estrategia puede aplicarse en matemáticas, diseño, mecánica, inglés, química, electrónica,
-                logística y muchas otras áreas.</p>
-        </div>
-    </section>
+  <!-- MÁS ALLÁ -->
+  <section class="section">
+    <div class="message">
+      <h2>💡 Más allá de la Biología</h2>
+      <p>La misma estrategia puede aplicarse en matemáticas, diseño, mecánica, inglés, química, electrónica, logística y muchas otras áreas.</p>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="institution">
-            <p><strong>SENA</strong><br>Centro Tecnológico del Mobiliario<br>Tecnoacademia 2026</p>
-            <div class="authors">
-                <h3>Autores de la experiencia</h3>
-                <p>David Murcia - Elizabeth Alzate - Víctor Cifuentes </p>
-            </div>
-        </div>
-    </section>
+  <!-- INSTITUCIÓN -->
+  <section class="section">
+    <div class="institution">
+      <p><strong>SENA</strong><br>Centro Tecnológico del Mobiliario<br>Tecnoacademia 2026</p>
+      <div class="authors">
+        <h3>Autores de la experiencia</h3>
+        <p>David Murcia · Elizabeth Alzate · Víctor Cifuentes</p>
+      </div>
+    </div>
+  </section>
 
-    <footer>
-        Transferencia de Tecnologías Educativas • Tecnoacademia SENA 2026
-    </footer>
+  <footer>TRANSFERENCIA DE TECNOLOGÍAS EDUCATIVAS &nbsp;·&nbsp; TECNOACADEMIA SENA 2026</footer>
 
 </body>
-
 </html>
