@@ -20,6 +20,57 @@
       --glass:     rgba(13,74,42,.22);
     }
 
+    [data-theme="light"] {
+      --bg:        #f4f9f6;
+      --bg2:       #e8f2ec;
+      --green-dim: #a3e0c0;
+      --green:     #179c46;
+      --green-hi:  #0e7532;
+      --blue:      #0b8fa3;
+      --blue-dim:  #aae3eb;
+      --text:      #0a2e1d;
+      --muted:     #42795c;
+      --border:    rgba(29,185,84,.3);
+      --glass:     rgba(255,255,255,.6);
+    }
+
+    [data-theme="light"] body::before {
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(29,185,84,.15) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(34,211,238,.12) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 30% at 50% 100%, rgba(13,74,42,.08) 0%, transparent 60%);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(29,185,84,.3);
+    }
+    .theme-toggle .icon-sun { display: block; }
+    .theme-toggle .icon-moon { display: none; }
+    
+    [data-theme="light"] .theme-toggle .icon-sun { display: none; }
+    [data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
 
     body {
@@ -139,6 +190,16 @@
     .btn-3d:hover {
       box-shadow: 0 0 42px rgba(34,211,238,.3);
       transform: translateY(-2px);
+    }
+
+    [data-theme="light"] .btn-ar {
+      background: linear-gradient(135deg, #e6f6ed 0%, #dcf0f2 100%);
+      box-shadow: 0 0 28px rgba(29,185,84,.2), inset 0 1px 0 rgba(255,255,255,.5);
+    }
+
+    [data-theme="light"] .btn-3d {
+      background: linear-gradient(135deg, #dcf0f2 0%, #d9e6ed 100%);
+      box-shadow: 0 0 28px rgba(34,211,238,.15), inset 0 1px 0 rgba(255,255,255,.5);
     }
 
     .btn-icon {
@@ -309,8 +370,20 @@
       .viewer iframe { height: 56vw; min-height: 240px; }
     }
   </style>
+  <script>
+    // Evitar parpadeo aplicando el tema antes de renderizar
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
 </head>
 <body>
+
+  <!-- THEME TOGGLE -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+    <span class="icon-sun">☀️</span>
+    <span class="icon-moon">🌙</span>
+  </button>
 
   <!-- HERO -->
   <section class="hero">
@@ -420,5 +493,17 @@
 
   <footer>TRANSFERENCIA DE TECNOLOGÍAS EDUCATIVAS &nbsp;·&nbsp; TECNOACADEMIA SENA 2026</footer>
 
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      if (document.documentElement.getAttribute('data-theme') === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
 </body>
 </html>
